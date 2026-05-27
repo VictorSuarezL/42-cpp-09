@@ -11,7 +11,7 @@ int	main(int argc, char **argv)
 	}
 	try
 	{
-		std::cout << calculator.calculate(argv[1]) << std::endl;
+		calculator.calculate(argv[1]);
 	}
 	catch (const std::exception &e)
 	{

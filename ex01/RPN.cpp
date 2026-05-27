@@ -4,14 +4,14 @@ RPN::RPN()
 {
 }
 
-RPN::RPN(const RPN &other) : _numbers(other._numbers)
+RPN::RPN(const RPN &other)
 {
+	(void)other;
 }
 
 RPN &RPN::operator=(const RPN &other)
 {
-	if (this != &other)
-		_numbers = other._numbers;
+	(void)other;
 	return (*this);
 }
 
@@ -19,54 +19,44 @@ RPN::~RPN()
 {
 }
 
-bool RPN::isOperator(const std::string &token)
+void RPN::calculate(const std::string &expression) const
 {
-	return (token.size() == 1
-		&& (token[0] == '+' || token[0] == '-' || token[0] == '*' || token[0] == '/'));
-}
-
-void RPN::applyOperator(char op)
-{
-	int	right;
-	int	left;
-
-	if (_numbers.size() < 2)
-		throw std::runtime_error("Error");
-	right = _numbers.top();
-	_numbers.pop();
-	left = _numbers.top();
-	_numbers.pop();
-	if (op == '+')
-		_numbers.push(left + right);
-	else if (op == '-')
-		_numbers.push(left - right);
-	else if (op == '*')
-		_numbers.push(left * right);
-	else
-	{
-		if (right == 0)
-			throw std::runtime_error("Error");
-		_numbers.push(left / right);
-	}
-}
-
-int RPN::calculate(const std::string &expression)
-{
+	std::stack<int>		numbers;
 	std::istringstream	stream(expression);
 	std::string			token;
+	int					a;
+	int					b;
 
-	while (!_numbers.empty())
-		_numbers.pop();
 	while (stream >> token)
 	{
 		if (token.size() == 1 && token[0] >= '0' && token[0] <= '9')
-			_numbers.push(std::atoi(token.c_str()));
-		else if (isOperator(token))
-			applyOperator(token[0]);
+			numbers.push(token[0] - '0');
+		else if (token.size() == 1
+			&& (token[0] == '+' || token[0] == '-' || token[0] == '*' || token[0] == '/'))
+		{
+			if (numbers.size() < 2)
+				throw std::runtime_error("Error");
+			b = numbers.top();
+			numbers.pop();
+			a = numbers.top();
+			numbers.pop();
+			if (token[0] == '+')
+				numbers.push(a + b);
+			else if (token[0] == '-')
+				numbers.push(a - b);
+			else if (token[0] == '*')
+				numbers.push(a * b);
+			else
+			{
+				if (b == 0)
+					throw std::runtime_error("Error");
+				numbers.push(a / b);
+			}
+		}
 		else
 			throw std::runtime_error("Error");
 	}
-	if (_numbers.size() != 1)
+	if (numbers.size() != 1)
 		throw std::runtime_error("Error");
-	return (_numbers.top());
+	std::cout << numbers.top() << std::endl;
 }
