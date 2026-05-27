@@ -13,12 +13,11 @@
 class BitcoinExchange
 {
 	private:
-		std::map<int, double> _rates;
+		std::map<std::string, double> _rates;
 
-		static bool		isLeapYear(int year);
-		static int		dateToInt(const std::string &date);
-		static double	valueToDouble(const std::string &value, bool checkLimit);
-		static void		printResult(int date, double value, double rate);
+		bool	isValidDate(const std::string &date) const;
+		bool	isValidValue(const std::string &value, double &number) const;
+		bool	getRate(const std::string &date, double &rate) const;
 
 	public:
 		BitcoinExchange();
