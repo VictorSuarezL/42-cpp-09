@@ -7,6 +7,7 @@
 # include <deque>
 # include <iomanip>
 # include <iostream>
+# include <algorithm>
 # include <stdexcept>
 # include <string>
 # include <vector>
@@ -20,12 +21,9 @@ class PmergeMe
 		double				_dequeTime;
 
 		static int					parseNumber(const std::string &text);
-		static std::vector<int>		sortVector(const std::vector<int> &values);
-		static std::deque<int>		sortDeque(const std::deque<int> &values);
-		static void					insertVector(std::vector<int> &values, int number);
-		static void					insertDeque(std::deque<int> &values, int number);
-		static std::vector<std::size_t>	jacobsthalOrder(std::size_t size);
-		static void					printVector(const std::vector<int> &values);
+		static void					mergeInsertSort(std::vector<int> &values);
+		static void					mergeInsertSort(std::deque<int> &values);
+		static void					printNumbers(const std::vector<int> &values);
 
 	public:
 		PmergeMe();
